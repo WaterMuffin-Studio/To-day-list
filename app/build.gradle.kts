@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.material.icons.extended) // Иконки
+    implementation(libs.material.icons.extended)
 
     implementation(libs.androidx.lifecycle.viewmodel.compose) // MVVM
     implementation(libs.androidx.navigation.compose) // Навигация
@@ -71,6 +71,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    implementation(libs.androidx.navigation.compose)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
