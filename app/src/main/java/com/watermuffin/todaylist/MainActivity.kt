@@ -1,6 +1,8 @@
 package com.watermuffin.todaylist
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -28,11 +30,14 @@ import com.watermuffin.todaylist.ui.screens.todays.TodaysScreen
 import com.watermuffin.todaylist.ui.theme.TodayListTheme
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
+import com.watermuffin.todaylist.data.database.TodayListDatabase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val database: TodayListDatabase = TodayListDatabase.getDatabase(this)
 
         enableEdgeToEdge()
         setContent {
@@ -48,6 +53,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     var currentScreen by remember { mutableStateOf("todays") }
+    val database: TodayListDatabase = TodayListDatabase.getDatabase(LocalContext.current)
 
     Scaffold(
         bottomBar = {

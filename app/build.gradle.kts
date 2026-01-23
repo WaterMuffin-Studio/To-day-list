@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+//    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -11,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.watermuffin.todaylist"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -49,19 +51,21 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.material.icons.extended)
 
-    implementation(libs.androidx.lifecycle.viewmodel.compose) // MVVM
-    implementation(libs.androidx.navigation.compose) // Навигация
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.kotlinx.coroutines.android) // Асинхронность
+    implementation(libs.kotlinx.coroutines.android)
 
-    // Room (позже):
-    // implementation(libs.androidx.room.runtime)
-    // implementation(libs.androidx.room.ktx)
-    // kapt(libs.androidx.room.compiler) // Нужно добавить в TOML
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.kotlinx.datetime)
 
-    implementation(libs.androidx.work.runtime.ktx) // Напоминания
 
-    implementation(libs.compose.material.dialogs.datetime) // Календарь/время
+    implementation(libs.androidx.work.runtime.ktx)
+
+    implementation(libs.compose.material.dialogs.datetime)
+    ksp(libs.androidx.room.compiler)
 
     // Графики (позже):
     // implementation(libs.ycharts)
@@ -75,4 +79,17 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.coil.compose)
+    implementation(libs.accompanist.permissions)
+}
+
+configurations.all {
+    exclude(group = "com.intellij", module = "annotations")
 }
