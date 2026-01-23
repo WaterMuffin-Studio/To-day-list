@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">To-day list</string>
     <string name="todaylist">TodayList</string>
+    <string name="progress_nav_button_title">Прогресс</string>
+    <string name="calendar_nav_button_title">Календарь</string>
+    <string name="home_nav_button_title">Главная</string>
+    <string name="notes_nav_button_title">Заметки</string>
+    <string name="profile_nav_button_title">Профиль</string>
+    <string name="default_note_title">Новая заметка</string>
 </resources>
