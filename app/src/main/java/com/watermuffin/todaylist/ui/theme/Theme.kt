@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 @Immutable
 data class CustomColors(
     val textPrimary: Color = Color.Unspecified,
+    val avatarDefault: Color = Color.Unspecified,
 )
 
 val LocalCustomColors = staticCompositionLocalOf { CustomColors() }
@@ -29,11 +30,13 @@ val MaterialTheme.customColors: CustomColors
     get() = LocalCustomColors.current
 
 private val LightCustomPalette = CustomColors(
-    textPrimary = primaryTextColor
+    textPrimary = primaryTextColor,
+    avatarDefault = avatarDefault,
 )
 
 private val DarkCustomPalette = CustomColors(
-    textPrimary = primaryTextColorDark
+    textPrimary = primaryTextColorDark,
+    avatarDefault = avatarDefaultDark,
 )
 
 

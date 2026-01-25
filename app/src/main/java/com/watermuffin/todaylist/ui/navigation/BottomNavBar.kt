@@ -72,7 +72,7 @@ fun RowScope.NavItem (
                 indication = ripple(
                     bounded = false,
                     radius = 40.dp,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
                 )
             ),
         contentAlignment = Alignment.Center
@@ -106,8 +106,6 @@ fun BottomNavBar(
     currentRoute: String,
     onNavigate: (String) -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
