@@ -15,7 +15,7 @@ fun TodaysScreen() {
         text = "Сегодня, 23.01.2025",
         color = MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
         textAlign = TextAlign.Center
     )
 }
