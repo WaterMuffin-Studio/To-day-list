@@ -7,4 +7,8 @@
     <string name="notes_nav_button_title">Заметки</string>
     <string name="profile_nav_button_title">Профиль</string>
     <string name="default_note_title">Новая заметка</string>
+    <string name="screen_progress_title">Статистика</string>
+    <string name="screen_calendar_title">Календарь</string>
+    <string name="screen_notes_title">Заметки</string>
+    <string name="screen_profile_title">Профиль</string>
 </resources>

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.watermuffin.todaylist.R
+import com.watermuffin.todaylist.ui.theme.customColors
 
 @Composable
 fun RowScope.NavItem (
@@ -56,7 +57,7 @@ fun RowScope.NavItem (
     )
 
     val contentColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary
+        MaterialTheme.customColors.textPrimary
     } else {
         MaterialTheme.colorScheme.onBackground
     }
@@ -71,7 +72,7 @@ fun RowScope.NavItem (
                 indication = ripple(
                     bounded = false,
                     radius = 40.dp,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
                 )
             ),
         contentAlignment = Alignment.Center
@@ -105,8 +106,6 @@ fun BottomNavBar(
     currentRoute: String,
     onNavigate: (String) -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()

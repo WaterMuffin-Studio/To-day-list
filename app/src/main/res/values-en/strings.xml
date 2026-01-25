@@ -7,4 +7,8 @@
     <string name="notes_nav_button_title">Notes</string>
     <string name="profile_nav_button_title">Profile</string>
     <string name="default_note_title">New note</string>
+    <string name="screen_progress_title">Statistics</string>
+    <string name="screen_calendar_title">Calendar</string>
+    <string name="screen_notes_title">Notes</string>
+    <string name="screen_profile_title">Profile</string>
 </resources>

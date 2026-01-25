@@ -1,4 +1,4 @@
-package com.watermuffin.todaylist.ui.screens.profile.buttons
+package com.watermuffin.todaylist.ui.screens.profile.components
 
 import androidx.compose.runtime.Composable
 

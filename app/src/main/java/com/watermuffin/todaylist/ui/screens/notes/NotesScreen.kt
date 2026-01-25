@@ -15,7 +15,7 @@ fun NotesScreen() {
         text = "Заметки",
         color = MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
         textAlign = TextAlign.Center
     )
 }
