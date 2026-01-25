@@ -71,6 +71,8 @@ coil-compose = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
 # ycharts = { group = "co.yml", name = "ycharts", version.ref = "ycharts" }
 
 [plugins]
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+room = { id = "androidx.room", version.ref = "roomKtx" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinCompose" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

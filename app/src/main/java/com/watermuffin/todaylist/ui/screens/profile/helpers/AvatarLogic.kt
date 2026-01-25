@@ -23,3 +23,13 @@ fun saveAvatarToStorage(context: Context, imageUri: Uri): String? {
         null
     }
 }
+
+fun getAvatarFile(context: Context, fileName: String): File? {
+    val file = File(context.filesDir, fileName)
+    return if (file.exists()) file else null
+}
+
+fun deleteAvatar(context: Context, fileName: String): Boolean {
+    val file = File(context.filesDir, fileName)
+    return file.delete()
+}

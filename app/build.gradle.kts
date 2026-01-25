@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.room)
 //    alias(libs.plugins.kotlin.android)
 }
 
@@ -37,6 +39,10 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
@@ -92,4 +98,9 @@ dependencies {
 
 configurations.all {
     exclude(group = "com.intellij", module = "annotations")
+}
+
+ksp {
+    arg("useKspGeneratedId", "true")
+    arg("dagger.fastInit", "enabled")
 }

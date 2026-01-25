@@ -29,11 +29,21 @@ import com.watermuffin.todaylist.ui.screens.statistics.StatisticsScreen
 import com.watermuffin.todaylist.ui.screens.todays.TodaysScreen
 import com.watermuffin.todaylist.ui.theme.TodayListTheme
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.watermuffin.todaylist.data.database.TodayListDatabase
+import com.watermuffin.todaylist.ui.screens.auth.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +52,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TodayListTheme {
-                MainScreen()
+                AppEntryPoint()
             }
         }
     }
@@ -50,6 +60,38 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalAnimationApi::class)
 
+@Composable
+fun AppEntryPoint() {
+    val viewModel: UserViewModel = viewModel()
+    val users by viewModel.users.collectAsState()
+    val activeUser by viewModel.activeUser.collectAsState()
+
+    when {
+        users.isEmpty() -> AuthScreen(viewModel)
+//        activeUser == null -> UserSelectionScreen(viewModel)
+        else -> MainScreen()
+    }
+}
+
+@Composable
+fun UserSelectionScreen(viewModel: UserViewModel) {
+    val scope = rememberCoroutineScope()
+}
+
+@Composable
+fun AuthScreen(viewModel: UserViewModel) {
+    val scope = rememberCoroutineScope()
+
+    Button(onClick = {
+        scope.launch {
+            viewModel.createUser("WaterMuffin", null)
+        }
+    }) {
+        Text("Создать профиль")
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen() {
     var currentScreen by remember { mutableStateOf("todays") }
