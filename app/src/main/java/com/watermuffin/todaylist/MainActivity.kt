@@ -31,6 +31,7 @@ import com.watermuffin.todaylist.ui.theme.TodayListTheme
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -69,7 +70,7 @@ fun AppEntryPoint() {
     when {
         users.isEmpty() -> AuthScreen(viewModel)
 //        activeUser == null -> UserSelectionScreen(viewModel)
-        else -> MainScreen()
+        else -> MainScreen(viewModel)
     }
 }
 
@@ -84,7 +85,8 @@ fun AuthScreen(viewModel: UserViewModel) {
 
     Button(onClick = {
         scope.launch {
-            viewModel.createUser("WaterMuffin", null)
+            val userId = viewModel.createUser("WaterMusffin", null)
+            Log.d("CUSTOM DEBUG", "CREATED USER $userId")
         }
     }) {
         Text("Создать профиль")
@@ -93,9 +95,18 @@ fun AuthScreen(viewModel: UserViewModel) {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: UserViewModel) {
     var currentScreen by remember { mutableStateOf("todays") }
     val database: TodayListDatabase = TodayListDatabase.getDatabase(LocalContext.current)
+
+    LaunchedEffect(Unit) {
+        if (viewModel.activeUser.value?.id == null) {
+            if (viewModel.getUser(1).value == null) Log.e("USER ERROR", "There are no users...")
+            else viewModel.selectUser(1)
+        } else {
+            Log.d("APP STARTING", "ACTIVE USER: ${viewModel.activeUser.value?.id}")
+        }
+    }
 
     Scaffold(
         bottomBar = {
