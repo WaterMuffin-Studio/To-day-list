@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 data class CustomColors(
     val textPrimary: Color = Color.Unspecified,
     val avatarDefault: Color = Color.Unspecified,
+    val screenTitle: Color = Color.Unspecified,
 )
 
 val LocalCustomColors = staticCompositionLocalOf { CustomColors() }
@@ -32,11 +33,13 @@ val MaterialTheme.customColors: CustomColors
 private val LightCustomPalette = CustomColors(
     textPrimary = primaryTextColor,
     avatarDefault = avatarDefault,
+    screenTitle = screenTitle,
 )
 
 private val DarkCustomPalette = CustomColors(
     textPrimary = primaryTextColorDark,
     avatarDefault = avatarDefaultDark,
+    screenTitle = screenTitleDark,
 )
 
 

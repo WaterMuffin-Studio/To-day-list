@@ -1,12 +1,15 @@
 package com.watermuffin.todaylist
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -29,6 +32,7 @@ import com.watermuffin.todaylist.ui.screens.statistics.StatisticsScreen
 import com.watermuffin.todaylist.ui.screens.todays.TodaysScreen
 import com.watermuffin.todaylist.ui.theme.TodayListTheme
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.togetherWith
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +43,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.watermuffin.todaylist.data.database.TodayListDatabase
+import com.watermuffin.todaylist.ui.auth.AuthActivity
 import com.watermuffin.todaylist.ui.screens.auth.UserViewModel
+import com.watermuffin.todaylist.ui.screens.profile.goToAuth
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
@@ -48,12 +54,13 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val startScreen = intent.getStringExtra("STARTWITH") ?: "todays"
         val database: TodayListDatabase = TodayListDatabase.getDatabase(this)
 
         enableEdgeToEdge()
         setContent {
             TodayListTheme {
-                AppEntryPoint()
+                AppEntryPoint(startScreen)
             }
         }
     }
@@ -62,16 +69,19 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalAnimationApi::class)
 
 @Composable
-fun AppEntryPoint() {
+fun AppEntryPoint(mainStartScreen: String) {
     val viewModel: UserViewModel = viewModel()
     val users by viewModel.users.collectAsState()
     val activeUser by viewModel.activeUser.collectAsState()
+    val context = LocalContext.current
 
-    when {
-        users.isEmpty() -> AuthScreen(viewModel)
-//        activeUser == null -> UserSelectionScreen(viewModel)
-        else -> MainScreen(viewModel)
+    LaunchedEffect(users) {
+        if (users != null && users?.isEmpty() == true) {
+            goToAuth(context = context, clearStack = true, isFirst = true)
+        }
     }
+
+    MainScreen(viewModel, mainStartScreen)
 }
 
 @Composable
@@ -85,7 +95,7 @@ fun AuthScreen(viewModel: UserViewModel) {
 
     Button(onClick = {
         scope.launch {
-            val userId = viewModel.createUser("WaterMusffin", null)
+            val userId = viewModel.createUser("WaterMuffin", null)
             Log.d("CUSTOM DEBUG", "CREATED USER $userId")
         }
     }) {
@@ -95,14 +105,16 @@ fun AuthScreen(viewModel: UserViewModel) {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MainScreen(viewModel: UserViewModel) {
-    var currentScreen by remember { mutableStateOf("todays") }
+fun MainScreen(viewModel: UserViewModel, startScreen: String) {
+    var currentScreen by remember { mutableStateOf(startScreen) }
     val database: TodayListDatabase = TodayListDatabase.getDatabase(LocalContext.current)
 
     LaunchedEffect(Unit) {
+        Log.d("WHAT USERS", "USERS ${viewModel.users.value}")
         if (viewModel.activeUser.value?.id == null) {
-            if (viewModel.getUser(1).value == null) Log.e("USER ERROR", "There are no users...")
-            else viewModel.selectUser(1)
+            viewModel.selectUser(1)
+//            if (viewModel.getUser(1).value == null) Log.e("USER ERROR", "There are no users...")
+//            else viewModel.selectUser(1)
         } else {
             Log.d("APP STARTING", "ACTIVE USER: ${viewModel.activeUser.value?.id}")
         }
@@ -126,9 +138,12 @@ fun MainScreen(viewModel: UserViewModel) {
             AnimatedContent(
                 targetState = currentScreen,
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(300)) with
-                            fadeOut(animationSpec = tween(300))
+                    EnterTransition.None togetherWith ExitTransition.None
                 },
+//                transitionSpec = {
+//                    fadeIn(animationSpec = tween(200)) with
+//                            fadeOut(animationSpec = tween(200))
+//                },
                 label = "screenAnimation"
             ) { screen ->
                 when (screen) {

@@ -24,6 +24,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TodayList.NoAnimation" />
+
         <receiver
             android:name=".TodayListWidget"
             android:exported="true"

@@ -2,6 +2,9 @@ package com.watermuffin.todaylist.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val closeButton = Color(0xFFBB0F0F)
+val onPrimary = Color(0xFFF1F1F1)
+
 // Светлая тема
 val primaryColor = Color(0xFF269893)
 val primaryTextColor = Color(0xFF18706B)
@@ -10,3 +13,4 @@ val mainBackgroundColor = Color(0xFFFFFFFF)
 val mainTitleColor = Color(0xFF111111)
 val mainSubtitleColor = Color(0xFF262626)
 val avatarDefault = Color(0xFF48B0AC)
+val screenTitle = Color(0xFF1C1C1C)

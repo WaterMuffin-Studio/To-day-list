@@ -23,4 +23,11 @@ val Typography = Typography(
         lineHeight = 36.sp,
         letterSpacing = 0.5.sp
     ),
+    titleSmall = TextStyle(
+        fontFamily = FontFamily(Font(R.font.lato_medium)),
+        fontWeight = FontWeight.Normal,
+        fontSize = 17.sp,
+        lineHeight = 25.sp,
+        letterSpacing = 0.5.sp
+    ),
 )

@@ -24,8 +24,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.watermuffin.todaylist.R
 import com.watermuffin.todaylist.ui.theme.customColors
 import java.io.File
 
@@ -45,15 +47,15 @@ fun ProfileAvatarImage (
 
     Box(
         modifier = Modifier
-            .size(180.dp)
+            .size(130.dp)
             .shadow(elevation = 10.dp, shape = CircleShape, clip = true)
-            .background(MaterialTheme.customColors.avatarDefault)
+            .background(MaterialTheme.colorScheme.background)
             .border(width = 2.dp, color = MaterialTheme.colorScheme.secondary, shape = CircleShape)
             .clickable(
                 interactionSource = interactionSource,
                 indication = ripple(
                     bounded = true,
-                    radius = 90.dp
+                    radius = 65.dp
                 )
             ) {
                 launcher.launch("image/*")
@@ -69,7 +71,7 @@ fun ProfileAvatarImage (
             )
         }
         else {
-            Icon(Icons.Default.Add, contentDescription = "NO AVATAR", tint = Color.White)
+            Icon(painterResource(R.drawable.plus), contentDescription = "NO AVATAR", tint = MaterialTheme.colorScheme.onBackground)
         }
     }
 }

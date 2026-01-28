@@ -11,4 +11,14 @@
     <string name="screen_calendar_title">Calendar</string>
     <string name="screen_notes_title">Notes</string>
     <string name="screen_profile_title">Profile</string>
+    <string name="profile_menu_button_select_profile">Select profile</string>
+    <string name="profile_menu_button_settings">Settings</string>
+    <string name="profile_menu_button_language">Language</string>
+    <string name="profile_menu_button_about">About app</string>
+    <string name="create_user">Create...</string>
+    <string name="username_input_placeholder">Nickname</string>
+    <string name="back">Back</string>
+    <string name="create_button">Create</string>
+    <string name="create_profile_error_name">Please enter username</string>
+    <string name="create_profile_error_avatar">Please add a profile picture</string>
 </resources>

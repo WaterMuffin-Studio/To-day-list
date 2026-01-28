@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.TodayList" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.TodayList.NoAnimation" parent="Theme.TodayList">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
+    </style>
 </resources>

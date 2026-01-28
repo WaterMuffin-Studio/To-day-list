@@ -11,4 +11,14 @@
     <string name="screen_calendar_title">Календарь</string>
     <string name="screen_notes_title">Заметки</string>
     <string name="screen_profile_title">Профиль</string>
+    <string name="profile_menu_button_select_profile">Выбрать профиль</string>
+    <string name="profile_menu_button_settings">Настройки</string>
+    <string name="profile_menu_button_language">Язык</string>
+    <string name="profile_menu_button_about">О приложении</string>
+    <string name="create_user">Создать...</string>
+    <string name="username_input_placeholder">Имя пользователя</string>
+    <string name="back">Назад</string>
+    <string name="create_button">Создать</string>
+    <string name="create_profile_error_name">Пожалуйста, введите имя пользователя</string>
+    <string name="create_profile_error_avatar">Пожалуйста, выберите фотографию профиля</string>
 </resources>

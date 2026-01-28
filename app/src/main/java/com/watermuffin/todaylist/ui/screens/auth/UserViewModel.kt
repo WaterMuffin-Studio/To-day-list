@@ -15,13 +15,15 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
-    val users: StateFlow<List<UserEntity>> = userRepository
+
+    val users: StateFlow<List<UserEntity>?> = userRepository
         .getAllUsers()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            initialValue = null
         )
+
 
     val activeUser: StateFlow<UserEntity?> = userRepository
         .getActiveUser()
