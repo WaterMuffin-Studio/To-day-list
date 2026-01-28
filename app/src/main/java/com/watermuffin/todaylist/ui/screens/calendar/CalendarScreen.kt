@@ -11,11 +11,5 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CalendarScreen() {
-    Text(
-        text = "Календарь",
-        color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
-        textAlign = TextAlign.Center
-    )
+
 }

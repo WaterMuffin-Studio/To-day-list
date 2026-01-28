@@ -2,8 +2,6 @@ package com.watermuffin.todaylist.ui.screens.profile
 
 import android.app.ActivityOptions
 import android.content.Intent
-import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +17,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -29,8 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.ripple
@@ -45,8 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -54,23 +48,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.processor.Context
 import com.watermuffin.todaylist.ui.screens.auth.UserViewModel
 import com.watermuffin.todaylist.ui.screens.profile.components.ProfileAvatarImage
 import com.watermuffin.todaylist.ui.screens.profile.components.ProfileMenuButton
 import com.watermuffin.todaylist.ui.screens.profile.helpers.saveAvatarToStorage
 import kotlinx.coroutines.launch
 import com.watermuffin.todaylist.R
+import com.watermuffin.todaylist.TodayListApplication
+import com.watermuffin.todaylist.data.store.AppSettings
 import com.watermuffin.todaylist.ui.auth.AuthActivity
 import com.watermuffin.todaylist.ui.screens.profile.components.ProfileMenuButtonSpacer
 import com.watermuffin.todaylist.ui.common.ReusableDialog
 import com.watermuffin.todaylist.ui.screens.profile.components.SelectUserButton
+import com.watermuffin.todaylist.ui.screens.profile.components.changeAppLanguage
 
 @Composable
 fun ProfileScreen() {
     val context = LocalContext.current
+    val app = context.applicationContext as TodayListApplication
+    val settings = remember { app.languageManager }
+
+    val currentLang by settings.languageFlow.collectAsState(initial = "ru")
+
     val viewModel: UserViewModel = viewModel()
-    val activeUser by viewModel.activeUser.collectAsState()
+    val activeUser by viewModel.activeUser.collectAsState(initial = null)
     var avatarPath by remember { mutableStateOf<String?>(activeUser?.avatarFileName) }
     var username by remember { mutableStateOf(activeUser?.name) }
     val allUsers by viewModel.users.collectAsState()
@@ -79,6 +80,7 @@ fun ProfileScreen() {
     val scrollState = rememberScrollState()
     var showSelectUserDialog by remember { mutableStateOf<Boolean>(false) }
     var showEditUsernameDialog by remember { mutableStateOf<Boolean>(false) }
+    var showChangeLanguageDialog by remember { mutableStateOf<Boolean>(false) }
     var isUsernameInputError by remember { mutableStateOf<Boolean>(false) }
 
     LaunchedEffect(activeUser) {
@@ -94,7 +96,7 @@ fun ProfileScreen() {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
-        ProfileAvatarImage(avatarPath = avatarPath) { uri ->
+        ProfileAvatarImage(avatarPath = activeUser?.avatarFileName) { uri ->
             val savedFileName = saveAvatarToStorage(context, uri)
 
             if (savedFileName != null) {
@@ -132,7 +134,7 @@ fun ProfileScreen() {
                 .padding(horizontal = 5.dp, vertical = 1.dp)
         ) {
             Text(
-                text = username ?: "Guest",
+                text = activeUser?.name ?: "Guest",
                 style = MaterialTheme.typography.titleLarge
             )
 
@@ -170,7 +172,7 @@ fun ProfileScreen() {
             icon = R.drawable.web,
             title = stringResource(R.string.profile_menu_button_language)
         ) {
-
+            showChangeLanguageDialog = true
         }
 
         ProfileMenuButton(
@@ -209,12 +211,14 @@ fun ProfileScreen() {
                             if (activeUser?.id != targetUser?.id) {
                                 username = user.name
                                 avatarPath = user.avatarFileName
-                                viewModel.selectUser(user.id)
+                                scope.launch {
+                                    viewModel.selectUser(user.id)
+                                }
                             }
-                            else {
-                                if (username != targetUser?.name) username = user.name
-                                if (avatarPath != targetUser?.name) avatarPath = user.avatarFileName
-                            }
+//                            else {
+//                                if (username != targetUser?.name) username = user.name
+//                                if (avatarPath != targetUser?.name) avatarPath = user.avatarFileName
+//                            }
                             showSelectUserDialog = false
                         }
                     )
@@ -244,7 +248,7 @@ fun ProfileScreen() {
             isUsernameInputError = false
         }
     ) {
-        val namePlaceholder: String = username ?: ""
+        val namePlaceholder: String = activeUser?.name ?: ""
         var inputText by remember { mutableStateOf(namePlaceholder) }
 
         Row(
@@ -306,6 +310,54 @@ fun ProfileScreen() {
                     .size(55.dp)
                     .padding(10.dp)
             )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
+    }
+
+    // ЯЗЫК
+    ReusableDialog(
+        isVisible = showChangeLanguageDialog,
+        onDismiss = {
+            showChangeLanguageDialog = false
+        }
+    ) {
+        val options = listOf("Русский" to "ru", "English" to "en")
+        var selectedOption by remember { mutableStateOf(options[0]) }
+
+        Column {
+            options.forEach { (displayName, langCode) ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            selectedOption = displayName to langCode
+
+                            scope.launch {
+                                settings.saveLanguage(langCode)
+                                changeAppLanguage(langCode)
+                            }
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = (currentLang == langCode),
+                        onClick = { }
+                    )
+                    Text(
+                        text = displayName,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 5.dp)
+        ) {
+            Spacer(modifier = Modifier.width(3.dp))
         }
 
         Spacer(modifier = Modifier.height(6.dp))

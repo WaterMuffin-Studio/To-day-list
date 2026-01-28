@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -41,28 +42,37 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.watermuffin.todaylist.data.database.TodayListDatabase
 import com.watermuffin.todaylist.ui.auth.AuthActivity
 import com.watermuffin.todaylist.ui.screens.auth.UserViewModel
+import com.watermuffin.todaylist.ui.screens.profile.components.changeAppLanguage
 import com.watermuffin.todaylist.ui.screens.profile.goToAuth
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val app = application as TodayListApplication
         val startScreen = intent.getStringExtra("STARTWITH") ?: "todays"
         val database: TodayListDatabase = TodayListDatabase.getDatabase(this)
 
-        enableEdgeToEdge()
-        setContent {
-            TodayListTheme {
-                AppEntryPoint(startScreen)
+        lifecycleScope.launch {
+            val savedLang = app.languageManager.getSavedLanguage()
+            changeAppLanguage(savedLang)
+
+            enableEdgeToEdge()
+            setContent {
+                TodayListTheme {
+                    AppEntryPoint(startScreen)
+                }
             }
         }
+
+        super.onCreate(savedInstanceState)
     }
 }
 
@@ -84,41 +94,20 @@ fun AppEntryPoint(mainStartScreen: String) {
     MainScreen(viewModel, mainStartScreen)
 }
 
-@Composable
-fun UserSelectionScreen(viewModel: UserViewModel) {
-    val scope = rememberCoroutineScope()
-}
-
-@Composable
-fun AuthScreen(viewModel: UserViewModel) {
-    val scope = rememberCoroutineScope()
-
-    Button(onClick = {
-        scope.launch {
-            val userId = viewModel.createUser("WaterMuffin", null)
-            Log.d("CUSTOM DEBUG", "CREATED USER $userId")
-        }
-    }) {
-        Text("Создать профиль")
-    }
-}
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(viewModel: UserViewModel, startScreen: String) {
     var currentScreen by remember { mutableStateOf(startScreen) }
     val database: TodayListDatabase = TodayListDatabase.getDatabase(LocalContext.current)
 
-    LaunchedEffect(Unit) {
-        Log.d("WHAT USERS", "USERS ${viewModel.users.value}")
-        if (viewModel.activeUser.value?.id == null) {
-            viewModel.selectUser(1)
-//            if (viewModel.getUser(1).value == null) Log.e("USER ERROR", "There are no users...")
-//            else viewModel.selectUser(1)
-        } else {
-            Log.d("APP STARTING", "ACTIVE USER: ${viewModel.activeUser.value?.id}")
-        }
-    }
+//    LaunchedEffect(viewModel.activeUser) {
+//        Log.d("WHAT USERS", "USERS ${viewModel.users.value}")
+//        if (viewModel.activeUser.value?.id == null) {
+//            viewModel.selectUser(1)
+//        } else {
+//            Log.d("APP STARTING", "ACTIVE USER: ${viewModel.activeUser.value?.id}")
+//        }
+//    }
 
     Scaffold(
         bottomBar = {
@@ -140,10 +129,6 @@ fun MainScreen(viewModel: UserViewModel, startScreen: String) {
                 transitionSpec = {
                     EnterTransition.None togetherWith ExitTransition.None
                 },
-//                transitionSpec = {
-//                    fadeIn(animationSpec = tween(200)) with
-//                            fadeOut(animationSpec = tween(200))
-//                },
                 label = "screenAnimation"
             ) { screen ->
                 when (screen) {

@@ -33,10 +33,8 @@ class UserViewModel @Inject constructor(
             initialValue = null
         )
 
-    fun selectUser(userId: Long) {
-        viewModelScope.launch {
-            userRepository.switchUser(userId)
-        }
+    suspend fun selectUser(userId: Long) {
+        userRepository.switchUser(userId)
     }
 
     suspend fun createUser(name: String, avatarFileName: String?): Long {

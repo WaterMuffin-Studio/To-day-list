@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -120,7 +121,7 @@ fun BottomNavBar(
             currentRoute = currentRoute,
             icon = R.drawable.chart_box_outline,
             iconIfSelected = R.drawable.chart_box,
-            label = "Прогресс",
+            label = stringResource(R.string.progress_nav_button_title),
             onClick = { onNavigate("statistics") }
         )
 
@@ -129,7 +130,7 @@ fun BottomNavBar(
             currentRoute = currentRoute,
             icon = R.drawable.calendar_month_outline,
             iconIfSelected = R.drawable.calendar_month,
-            label = "Календарь",
+            label = stringResource(R.string.calendar_nav_button_title),
             onClick = { onNavigate("calendar") }
         )
 
@@ -138,7 +139,7 @@ fun BottomNavBar(
             currentRoute = currentRoute,
             icon = R.drawable.book_open_variant_outline,
             iconIfSelected = R.drawable.book_open_variant,
-            label = "Главная",
+            label = stringResource(R.string.home_nav_button_title),
             onClick = { onNavigate("todays") }
         )
 
@@ -147,7 +148,7 @@ fun BottomNavBar(
             currentRoute = currentRoute,
             icon = R.drawable.note_edit_outline,
             iconIfSelected = R.drawable.note_edit,
-            label = "Заметки",
+            label = stringResource(R.string.notes_nav_button_title),
             onClick = { onNavigate("notes") }
         )
 
@@ -156,7 +157,7 @@ fun BottomNavBar(
             currentRoute = currentRoute,
             icon = R.drawable.account_circle_outline,
             iconIfSelected = R.drawable.account_circle,
-            label = "Профиль",
+            label = stringResource(R.string.profile_nav_button_title),
             onClick = { onNavigate("profile") }
         )
     }
